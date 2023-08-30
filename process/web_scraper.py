@@ -1,11 +1,12 @@
 import requests
 from bs4 import BeautifulSoup
 import json
+import os
 
 class WebScraper:
     def __init__(self, url, output_file):
         self.url = url
-        self.output_file = output_file
+        self.output_file = os.path.join('json_data', output_file)
 
     def scrape_table_data(self):
         response = requests.get(self.url)
@@ -29,7 +30,11 @@ class WebScraper:
         for row in table_data:
             table_dict_list.append(dict(zip(headers, row)))
 
-        with open(self.output_file, 'w') as json_file:
-            json.dump(table_dict_list, json_file, indent=4)
+        with open(self.output_file, 'w', encoding='utf-8') as json_file:
+            json.dump(table_dict_list, json_file, indent=4, ensure_ascii=False)
 
         print(f"Extracted table data saved to {self.output_file}")
+
+if __name__ == "__main__":
+    scraper = WebScraper("https://genshin-impact.fandom.com/wiki/Wonders_of_the_World", "output_file.json")
+    scraper.scrape_table_data()

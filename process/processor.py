@@ -2,26 +2,40 @@
 
 import argparse
 import time
+import os
 from .video_processor import VideoProcessor
 from .text_processor import TextProcessor
 from .table_processor import TableProcessor
 from .web_scraper import WebScraper
 
 def run(video_path):
+
+    # Check if the json_data folder exists, if not, create it
+    json_data_folder = "json_data"
+
+    if not os.path.exists(json_data_folder):
+        os.makedirs(json_data_folder)
+
     start_time = time.time()
 
     # Initialize the VideoProcessor
     video_processor = VideoProcessor(video_path)
-    video_processor.capture_frames()
+    video_processor.process_video()
     video_duration = time.time() - start_time
     print(f"Video processing time: {video_duration:.2f} seconds")
 
     start_time = time.time()
     # Initialize the TextProcessor and process text data
-    text_processor = TextProcessor()
+    text_processor = TextProcessor(video_processor.temp_folder_path)
     text_processor.process_text_data()
     text_processing_duration = time.time() - start_time
     print(f"Text processing time: {text_processing_duration:.2f} seconds")
+
+    # Cleanup temporal folder after finish process text data
+    start_time = time.time()
+    video_processor.cleanup()
+    video_cleanup_duration = time.time() - start_time
+    print(f"Clean up images processing time: {video_cleanup_duration:.2f} seconds")
 
     start_time = time.time()
     # Initialize the WebScraper and scrape table data
@@ -42,7 +56,7 @@ def run(video_path):
     filtered_data = table_processor.filter_matching_data(text_processor.data)
 
     # Save the filtered data to a JSON file
-    filtered_output_file = 'filtered_data.json'
+    filtered_output_file = os.path.join('json_data', 'filtered_data.json')
     table_processor.save_data_to_json(filtered_data, filtered_output_file)
     filtering_and_saving_duration = time.time() - start_time
     print(f"Filtering and saving time: {filtering_and_saving_duration:.2f} seconds")

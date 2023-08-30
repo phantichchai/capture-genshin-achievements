@@ -8,7 +8,7 @@ from nltk.tokenize import word_tokenize
 nltk.download('punkt')
 
 class TextProcessor:
-    def __init__(self, image_folder='achievements/resource'):
+    def __init__(self, image_folder):
         self.image_folder = image_folder
         self.data = []
 
@@ -29,11 +29,8 @@ class TextProcessor:
                 if non_empty_lines:
                     extracted_text_data.append({
                         'filename': filename,
-                        'text_lines': non_empty_lines,
-                        'order': int(filename.split('.')[0])
+                        'text_lines': non_empty_lines
                     })
-
-        extracted_text_data.sort(key=lambda x: x['order'])
 
         processed_data = []
         for entry in extracted_text_data:
