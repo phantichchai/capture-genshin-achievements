@@ -1,7 +1,6 @@
 import tkinter as tk
-from threading import Thread
-from process.processor import run
-from gui.file_selector import FileSelector
+from tkinter import ttk
+from .view.upload import UploadView
 
 class GenshinImpactAchievementsApp:
     def __init__(self, root):
@@ -13,37 +12,18 @@ class GenshinImpactAchievementsApp:
         icon_path = "resources/icon.ico"
         self.root.iconbitmap(icon_path)
 
-        self.label = tk.Label(self.root, text="Undiscovered achievements", font=("Helvetica", 24, "bold"))
-        self.label.place(relx=0.5, rely=0.2, anchor="center")
+        self.notebook = ttk.Notebook(self.root)  # Create a notebook widget
+        self.notebook.pack(fill="both", expand=True)
 
-        self.file_selector = FileSelector(self.root)
-        self.file_selector.place(relx=0.5, rely=0.4, anchor="center")
+        self.tab1 = ttk.Frame(self.notebook)
+        self.tab2 = ttk.Frame(self.notebook)
+        self.tab3 = ttk.Frame(self.notebook)
 
-        self.process_button = tk.Button(self.root, text="Process Achievements", command=self.process_achievements)
-        self.process_button.place(relx=0.5, rely=0.5, anchor="center")
+        self.notebook.add(self.tab1, text="Upload Video")  # Add tab 1
+        self.notebook.add(self.tab2, text="Completed")  # Add tab 2
+        self.notebook.add(self.tab3, text="Uncompleted") # Add tab 3
 
-    def process_achievements(self):
-        if hasattr(self.file_selector, "selected_file") and self.file_selector.get_selected_file():
-            self.process_button.config(state=tk.DISABLED)
-            self.process_button.update()
-            self.process_thread = Thread(target=self.process_achievements_thread)
-            self.process_thread.start()
-        else:
-            self.show_error("Please select a video file.")
-
-    def process_achievements_thread(self):
-        # Get the selected file from the FileSelector instance
-        video_path = self.file_selector.get_selected_file()
-        if video_path:
-            run(video_path)
-            self.show_message("Achievements processing completed.")
-            self.process_button.config(state=tk.NORMAL)
-
-    def show_error(self, message):
-        tk.messagebox.showerror("Error", message)
-
-    def show_message(self, message):
-        tk.messagebox.showinfo("Message", message)
+        self.upload_view = UploadView(self.tab1)
 
 if __name__ == "__main__":
     root = tk.Tk()
