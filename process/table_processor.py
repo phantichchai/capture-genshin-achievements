@@ -28,18 +28,18 @@ class TableProcessor:
         self.data = processed_table_data
 
     def find_matching_data(self, text_data):
-        uncompleted_acheivement_data = []
+        uncompleted_achievement_data = []
         completed_achievement_data = []
         for entry1 in self.data:
             achievement = entry1.get('processed_value')
             if achievement:
                 match_condition = next((entry2 for entry2 in text_data if achievement.lower() in ' '.join(entry2.get('processed_text_lines')).lower()), None)
                 if not match_condition:
-                    uncompleted_acheivement_data.append(entry1)
+                    uncompleted_achievement_data.append(entry1)
                 else:
                     completed_achievement_data.append(entry1)
                     
-        return uncompleted_acheivement_data, completed_achievement_data
+        return uncompleted_achievement_data, completed_achievement_data
 
     def save_data_to_json(self, data, output_file):
         with open(output_file, 'w', encoding='utf-8') as json_file:

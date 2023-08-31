@@ -42,9 +42,9 @@ def run_table_processor() -> (TableProcessor, str):
 
 def find_and_save_matching_data(table_processor, text_data) -> str:
     start_time = time.time()
-    (uncompleted_acheivement_data, completed_achievement_data) = table_processor.find_matching_data(text_data)
-    uncompleted_output_file = os.path.join('json_data', 'uncompleted_acheivement_data.json')
-    table_processor.save_data_to_json(uncompleted_acheivement_data, uncompleted_output_file)
+    (uncompleted_achievement_data, completed_achievement_data) = table_processor.find_matching_data(text_data)
+    uncompleted_output_file = os.path.join('json_data', 'uncompleted_achievement_data.json')
+    table_processor.save_data_to_json(uncompleted_achievement_data, uncompleted_output_file)
     completed_output_file = os.path.join('json_data', 'completed_achievement_data.json')
     table_processor.save_data_to_json(completed_achievement_data, completed_output_file)
     finding_and_saving_duration = time.time() - start_time
