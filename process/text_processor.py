@@ -5,7 +5,15 @@ import json
 import nltk
 import re
 from nltk.tokenize import word_tokenize
-nltk.download('punkt')
+from nltk.data import find
+
+# Check if 'punkt' data is available
+if find('tokenizers/punkt') is None:
+    print("'punkt' data not found. Downloading...")
+    nltk.download('punkt')
+    print("'punkt' data downloaded.")
+else:
+    print("'punkt' data is already available.")
 
 class TextProcessor:
     def __init__(self, image_folder):

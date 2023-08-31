@@ -23,8 +23,6 @@ class UploadView(tk.Frame):
             label.place(relx=0.5, rely=rely, anchor="center")
             self.process_label.append(label)
 
-
-
     def process_achievements(self):
         if hasattr(self.file_selector, "selected_file") and self.file_selector.get_selected_file():
             self.process_button.config(state=tk.DISABLED)
